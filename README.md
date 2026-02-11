@@ -108,13 +108,11 @@ A comprehensive full-stack pentesting platform built with angular, ASP.NET Core,
 
 Update `backend-api/appsettings.json`:
 ```json
-{
   "AI": {
-    "ApiUrl": "http://localhost:4891/v1/chat/completions",
-    "ApiKey": "",
-    "Model": "gemini"
+    "ApiUrl": "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
+    "ApiKey": "AIzaSyDQovhJuBvKOM4wNT1FuheKJ2pQKldqNzI",
+    "Model": "gemini-flash-latest"
   }
-}
 ```
 
 ### Tools Directory
