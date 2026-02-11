@@ -110,7 +110,7 @@ Update `backend-api/appsettings.json`:
 ```json
   "AI": {
     "ApiUrl": "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
-    "ApiKey": "AIzaSyDQovhJuBvKOM4wNT1FuheKJ2pQKldqNzI",
+    "ApiKey": "yourkey from here https://aistudio.google.com/",
     "Model": "gemini-flash-latest"
   }
 ```
