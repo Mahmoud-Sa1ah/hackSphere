@@ -1,4 +1,4 @@
-# PentestHub - Cybersecurity Pentesting Platform
+# PentestHub - Cybersecurity Pentesting Platform HackSphere
 
 A comprehensive full-stack pentesting platform built with React, ASP.NET Core, and a portable launcher client.
 
@@ -8,14 +8,14 @@ A comprehensive full-stack pentesting platform built with React, ASP.NET Core, a
 - **Backend**: ASP.NET Core 9 Web API
 - **Database**: MySQL
 - **Real-time**: SignalR
-- **AI Integration**: Local LLM API (GPT4All compatible)
+- **AI Integration**:LLM API (Gemini)
 - **Launcher**: C# .NET 9 Console Application
 
 ## 📁 Project Structure
 
 ```
 /
-├── frontend-react/          # React frontend application
+├── frontend-angular/          # angular frontend application
 ├── backend-api/             # ASP.NET Core Web API
 ├── launcher-client/         # Portable C# launcher executable
 ├── tools-containerized/     # Directory for pentesting tools
@@ -43,7 +43,7 @@ A comprehensive full-stack pentesting platform built with React, ASP.NET Core, a
    ```json
    {
      "ConnectionStrings": {
-       "DefaultConnection": "Server=localhost;Database=PentestHub;User=root;Password=yourpassword;Port=3306;"
+       "DefaultConnection": "Server=localhost;Database=PentestHub;User=username;Password=yourpassword;Port=3306;"
      }
    }
    ```
@@ -54,13 +54,13 @@ A comprehensive full-stack pentesting platform built with React, ASP.NET Core, a
    dotnet run
    ```
 
-   The API will be available at `http://localhost:5000`
+   The API will be available at `http://localhost:53812`
 
 ### Frontend Setup
 
-1. Navigate to `frontend-react`:
+1. Navigate to `frontend-angular`:
    ```bash
-   cd frontend-react
+   cd frontend-angular
    ```
 
 2. Install dependencies:
@@ -70,10 +70,10 @@ A comprehensive full-stack pentesting platform built with React, ASP.NET Core, a
 
 3. Start development server:
    ```bash
-   npm run dev
+   npm start
    ```
 
-   The frontend will be available at `http://localhost:5173`
+   The frontend will be available at `http://localhost:4200`
 
 ### Launcher Setup
 
@@ -112,7 +112,7 @@ Update `backend-api/appsettings.json`:
   "AI": {
     "ApiUrl": "http://localhost:4891/v1/chat/completions",
     "ApiKey": "",
-    "Model": "gpt4all-j"
+    "Model": "gemini"
   }
 }
 ```
