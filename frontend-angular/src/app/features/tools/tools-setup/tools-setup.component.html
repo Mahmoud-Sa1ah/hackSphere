@@ -1,0 +1,145 @@
+<div class="bg-gray-50 dark:bg-gray-900 min-h-full p-6">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <div class="flex flex-col items-center justify-center py-6 animate-in fade-in slide-in-from-top-4 duration-700">
+            <h1
+                class="text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-electric-purple dark:from-sky-blue dark:to-electric-purple mb-2">
+                Tools Setup Guide</h1>
+            <p class="text-gray-500 dark:text-gray-400 max-w-2xl text-center">Learn how to download, install, and verify
+                security tools for use in HackSphere</p>
+        </div>
+
+        <!-- Overview -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
+                <ng-icon name="lucideInfo" class="w-5 h-5 text-blue-500"></ng-icon>
+                <span>Overview</span>
+            </h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                Before you can run any security tool in HackSphere, you must download and install the tool's executable
+                file.
+                Each tool requires its own binary, script, or executable file to be present on your system.
+            </p>
+            <div class="bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700 rounded-lg p-4">
+                <p class="text-blue-800 dark:text-blue-200 text-sm">
+                    <strong>Important:</strong> Tools will not execute unless you have verified their installation.
+                    This ensures security and prevents errors from missing dependencies.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 1: Browse -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
+                <ng-icon name="lucideFolder" class="w-5 h-5 text-blue-500"></ng-icon>
+                <span>Step 1: Browse Tools</span>
+            </h2>
+            <div class="space-y-4">
+                <p class="text-gray-700 dark:text-gray-300">
+                    All available security tools are pre-configured on the HackSphere server. You do not need to install
+                    them locally.
+                </p>
+                <div class="bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700 rounded-lg p-4">
+                    <p class="text-blue-800 dark:text-blue-200 text-sm">
+                        <strong>Simplified Access:</strong> Simply navigate to the Tools page and click "Run Tool" to
+                        start using any available utility.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Request -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
+                <ng-icon name="lucideCircleCheck" class="w-5 h-5 text-green-500"></ng-icon>
+                <span>Step 2: Request New Tools</span>
+            </h2>
+            <div class="space-y-4">
+                <p class="text-gray-700 dark:text-gray-300">
+                    If a tool you need is missing, please contact the administrator to have it added to the
+                    `tools-containerized` directory on the server.
+                </p>
+            </div>
+        </div>
+
+        <!-- Common Tools -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
+                <ng-icon name="lucideFileText" class="w-5 h-5 text-purple-500"></ng-icon>
+                <span>Popular Tools & Download Links</span>
+            </h2>
+            <div class="space-y-3">
+                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Nmap</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">Network mapper and port scanner</p>
+                    <a href="https://nmap.org/download.html" target="_blank" rel="noopener noreferrer"
+                        class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm underline">
+                        Download from nmap.org →
+                    </a>
+                </div>
+                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">SQLMap</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">SQL injection tool</p>
+                    <a href="https://github.com/sqlmapproject/sqlmap" target="_blank" rel="noopener noreferrer"
+                        class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm underline">
+                        Download from GitHub →
+                    </a>
+                </div>
+                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Burp Suite</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">Web application security testing</p>
+                    <a href="https://portswigger.net/burp/communitydownload" target="_blank" rel="noopener noreferrer"
+                        class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm underline">
+                        Download from PortSwigger →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
+                <ng-icon name="lucideCircleAlert" class="w-5 h-5 text-red-500"></ng-icon>
+                <span>Troubleshooting</span>
+            </h2>
+            <div class="space-y-3">
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Tool not found error</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                        Make sure the file path is correct and the file exists. Check for typos in the path and ensure
+                        you're using the correct file extension (.exe, .bat, .py, etc.).
+                    </p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Permission denied</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                        Ensure the tool executable has execute permissions. On Windows, this is usually automatic. On
+                        Linux/Mac, you may need to run <code
+                            class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-gray-900 dark:text-gray-300">chmod +x toolname</code>.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Tool requires dependencies</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">
+                        Some tools require additional runtime environments (Python, Java, etc.). Install the required
+                        dependencies before verifying the tool.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Quick Links</h2>
+            <div class="flex flex-wrap gap-3">
+                <a routerLink="/tools"
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors cursor-pointer">
+                    Browse Tools
+                </a>
+                <a routerLink="/"
+                    class="px-4 py-2 bg-gray-600 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-lg transition-colors cursor-pointer">
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

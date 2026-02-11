@@ -1,0 +1,94 @@
+<div class="min-h-full p-6 space-y-6">
+    <!-- Header -->
+    <div
+        class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+        <div class="relative z-10">
+            <h1 class="text-3xl font-bold mb-2">Knowledge Base</h1>
+            <p class="text-blue-100 max-w-2xl">Explore our comprehensive guide to cybersecurity concepts, tools, and
+                methodologies.</p>
+
+            <!-- Search -->
+            <div class="mt-8 relative max-w-xl">
+                <ng-icon name="lucideSearch" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></ng-icon>
+                <input type="text" placeholder="Search for articles, tags, or concepts..." [(ngModel)]="searchQuery"
+                    (ngModelChange)="filterArticles()"
+                    class="w-full pl-12 pr-4 py-3 bg-white text-gray-900 rounded-xl shadow-lg focus:ring-4 focus:ring-blue-500/30 outline-none transition-all" />
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Sidebar Filters -->
+        <div class="w-full lg:w-64 space-y-4">
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm sticky top-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Categories</h3>
+                <div class="space-y-1">
+                    <button (click)="selectCategory(null)"
+                        class="w-full text-left px-3 py-2 rounded-lg text-sm transition-colors"
+                        [ngClass]="!selectedCategory ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'">
+                        All Categories
+                    </button>
+                    <button *ngFor="let cat of categories" (click)="selectCategory(cat)"
+                        class="w-full text-left px-3 py-2 rounded-lg text-sm transition-colors"
+                        [ngClass]="selectedCategory === cat ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'">
+                        {{ cat }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Articles Grid -->
+        <div class="flex-1">
+            <div *ngIf="loading" class="flex justify-center p-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            </div>
+
+            <div *ngIf="!loading && filteredArticles.length === 0"
+                class="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-full inline-flex mb-4">
+                    <ng-icon name="lucideBookOpen" class="w-8 h-8 text-gray-400"></ng-icon>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-1">No articles found</h3>
+                <p class="text-gray-500 text-sm">Try adjusting your search or category filter.</p>
+            </div>
+
+            <div *ngIf="!loading && filteredArticles.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Article Card - Clickable -->
+                <a *ngFor="let article of filteredArticles" [routerLink]="['/knowledge-base', article.knowledgeBaseId]"
+                    class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 group flex flex-col cursor-pointer no-underline">
+                    <div class="flex items-start justify-between mb-4">
+                        <span
+                            class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                            {{ article.category }}
+                        </span>
+                        <ng-icon name="lucideChevronRight"
+                            class="text-gray-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300"></ng-icon>
+                    </div>
+
+                    <h3
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {{ article.title }}
+                    </h3>
+
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                        {{ stripHtml(article.content) }}
+                    </p>
+
+                    <div
+                        class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                        <div class="flex items-center space-x-2">
+                            <ng-icon name="lucideClock" class="w-3.5 h-3.5"></ng-icon>
+                            <span>{{ article.createdAt | date:'mediumDate' }}</span>
+                        </div>
+                        <div class="flex items-center space-x-1" *ngIf="article.tags">
+                            <ng-icon name="lucideTag" class="w-3.5 h-3.5"></ng-icon>
+                            <span class="truncate max-w-[100px]">{{ article.tags }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

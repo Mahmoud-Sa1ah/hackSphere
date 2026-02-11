@@ -1,0 +1,181 @@
+<header
+    class="bg-white/90 dark:bg-space-light/80 backdrop-blur-md border-b border-sky-100 dark:border-space-secondary/30 sticky top-0 z-50 transition-colors duration-300">
+    <div class="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+        <div class="flex items-center">
+            <h1 class="text-2xl font-display font-bold bg-gradient-to-r from-sky-600 to-blue-700 dark:from-sky-blue dark:via-blue-400 dark:to-electric-purple bg-clip-text text-transparent hover:opacity-80 transition-opacity cursor-pointer tracking-wide drop-shadow-sm dark:drop-shadow-lg"
+                (click)="navigate('/dashboard')">
+                HackSphere
+            </h1>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- Home -->
+            <button (click)="navigate('/dashboard')"
+                class="p-2.5 text-sky-600 dark:text-gray-400 hover:bg-sky-50 dark:hover:text-sky-blue dark:hover:bg-sky-blue/10 rounded-xl transition-all duration-300 hover:shadow-soft-blue dark:hover:shadow-glow-blue border border-transparent dark:hover:border-sky-blue/30"
+                title="Home">
+                <ng-icon name="lucideHouse" size="20" strokeWidth="1.5"></ng-icon>
+            </button>
+
+            <!-- Notifications -->
+            <div class="relative" #notificationsRef>
+                <button (click)="showNotifications = !showNotifications"
+                    class="relative p-2.5 text-sky-600 dark:text-gray-400 hover:bg-sky-50 dark:hover:text-sky-blue dark:hover:bg-sky-blue/10 rounded-xl transition-all duration-300 hover:shadow-soft-blue dark:hover:shadow-glow-blue border border-transparent dark:hover:border-sky-blue/30"
+                    title="Notifications">
+                    <ng-icon name="lucideBell" size="20" strokeWidth="1.5"></ng-icon>
+                    @if (unreadCount > 0) {
+                    <span
+                        class="absolute top-1.5 right-1.5 bg-electric-purple text-white text-[10px] font-bold rounded-full w-2 h-2 shadow-glow-purple animate-pulse"></span>
+                    }
+                </button>
+
+                @if (showNotifications) {
+                <div
+                    class="absolute right-0 mt-4 w-96 bg-white dark:bg-space-dark rounded-xl shadow-2xl shadow-gray-200/50 dark:shadow-black/50 border border-gray-100 dark:border-space-secondary/50 z-50 transform origin-top-right transition-all animate-in fade-in slide-in-from-top-2 duration-200">
+                    <!-- Notification Header -->
+                    <div
+                        class="p-4 border-b border-gray-100 dark:border-space-secondary/50 flex justify-between items-center bg-gray-50/80 dark:bg-space-secondary/20 backdrop-blur-sm">
+                        <div class="flex items-center gap-3">
+                            <h3
+                                class="font-semibold text-gray-900 dark:text-white text-sm uppercase tracking-wider font-display">
+                                Notifications</h3>
+                            @if (unreadCount > 0) {
+                            <span
+                                class="text-[10px] font-bold text-white bg-electric-purple px-1.5 py-0.5 rounded-full shadow-glow-purple animate-pulse">{{
+                                unreadCount }}</span>
+                            }
+                        </div>
+                        @if (notifications.length > 0) {
+                        <button (click)="markAllAsRead()" title="Mark all as read"
+                            class="text-xs text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 font-medium flex items-center gap-1 transition-colors">
+                            <ng-icon name="lucideCheckCheck" size="14"></ng-icon>
+                            <span>Clear All</span>
+                        </button>
+                        }
+                    </div>
+                    <!-- Notification List: max 4 visible, scroll for more -->
+                    <div
+                        class="max-h-[280px] overflow-y-auto divide-y divide-gray-100 dark:divide-space-secondary/30 custom-scrollbar">
+                        @if (notifications.length === 0) {
+                        <div class="p-8 text-center text-gray-400 dark:text-gray-500">
+                            <ng-icon name="lucideBell" class="mx-auto h-10 w-10 mb-2 opacity-20"
+                                strokeWidth="1.5"></ng-icon>
+                            <p class="text-sm">Inbox is empty</p>
+                        </div>
+                        } @else {
+                        @for (notif of notifications; track notif.notificationId) {
+                        <div class="p-4 hover:bg-sky-50 dark:hover:bg-space-secondary/20 cursor-pointer transition-all duration-200 group relative border-l-2"
+                            [ngClass]="notif.isRead ? 'border-transparent' : 'border-sky-500 bg-sky-50/30 dark:bg-sky-500/5'"
+                            (click)="viewNotification(notif)">
+                            <div class="flex justify-between items-start gap-2">
+                                <div
+                                    class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors line-clamp-1">
+                                    {{ notif.title }}
+                                </div>
+                                <div class="text-[10px] text-gray-400 dark:text-gray-500 whitespace-nowrap mt-0.5">
+                                    {{ notif.createdAt | date:'shortTime' }}
+                                </div>
+                            </div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2 leading-relaxed">
+                                {{ notif.message }}
+                            </div>
+                        </div>
+                        }
+                        }
+                    </div>
+                    <!-- Scroll hint when more than 4 messages -->
+                    @if (notifications.length > 4) {
+                    <div class="px-4 py-2 border-t border-gray-100 dark:border-space-secondary/30 text-center">
+                        <span class="text-[11px] text-gray-400 dark:text-gray-500 italic">↓ Scroll for more
+                            messages</span>
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Help -->
+            <button
+                class="p-2.5 text-gray-400 hover:text-sky-blue hover:bg-sky-blue/10 rounded-xl transition-all duration-300 hover:shadow-glow-blue border border-transparent hover:border-sky-blue/30"
+                title="Help">
+                <ng-icon name="lucideCircleHelp" size="20" strokeWidth="1.5"></ng-icon>
+            </button>
+
+            <!-- Profile Avatar -->
+            <div class="relative" #profileMenuRef>
+                <button (click)="showProfileMenu = !showProfileMenu" class="focus:outline-none block">
+                    @if (authService.currentUserValue?.profilePhoto) {
+                    <img [src]="authService.currentUserValue?.profilePhoto" [alt]="authService.currentUserValue?.name"
+                        class="w-10 h-10 rounded-full object-cover shadow-glow-blue border border-sky-blue/30 hover:ring-2 hover:ring-sky-blue/50 transition-all duration-200 transform hover:scale-105 active:scale-95" />
+                    } @else {
+                    <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-sky-blue to-blue-700 text-white rounded-full font-medium shadow-glow-blue hover:ring-2 hover:ring-sky-blue/50 transition-all duration-200 transform hover:scale-105 active:scale-95 border border-sky-blue/30"
+                        [title]="authService.currentUserValue?.name || 'User'">
+                        {{ getUserInitials() }}
+                    </div>
+                    }
+                </button>
+
+                @if (showProfileMenu) {
+                <div
+                    class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-2xl shadow-gray-200/50 dark:shadow-black/50 border border-gray-100 dark:border-gray-700 z-50 transform origin-top-right transition-all animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden">
+                    <div
+                        class="px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">{{
+                            authService.currentUserValue?.name || 'User' }}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{{
+                            authService.currentUserValue?.email || 'user@example.com' }}</p>
+                    </div>
+
+                    <div class="p-2 flex flex-col gap-1">
+                        <button (click)="navigate('/profile')"
+                            class="w-full flex items-center space-x-3 px-3 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-sky-600 dark:hover:text-sky-400 rounded-lg transition-colors group">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-green-500 shadow-sm"></div>
+                            </div>
+                            <span class="font-medium text-sm">Profile</span>
+                        </button>
+
+                        <button (click)="navigate('/manage-account')"
+                            class="w-full flex items-center space-x-3 px-3 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-sky-600 dark:hover:text-sky-400 rounded-lg transition-colors group">
+                            <ng-icon name="lucideSettings" size="18"
+                                class="text-gray-400 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors"
+                                strokeWidth="1.5"></ng-icon>
+                            <span class="font-medium text-sm">Manage Account</span>
+                        </button>
+
+                        <div
+                            class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 pl-8">SIM Mode</span>
+                            <button (click)="toggleDarkMode()"
+                                class="relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                                [ngClass]="darkMode ? 'bg-electric-purple' : 'bg-gray-200'">
+                                <span
+                                    class="inline-block h-3 w-3 transform rounded-full bg-white transition-transform shadow-sm"
+                                    [ngClass]="darkMode ? 'translate-x-5' : 'translate-x-1'"></span>
+                            </button>
+                        </div>
+
+                        @if (authService.currentUserValue?.role === 'Admin') {
+                        <button (click)="navigate('/admin')"
+                            class="w-full flex items-center space-x-3 px-3 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-electric-purple dark:hover:text-electric-purple rounded-lg transition-colors group">
+                            <ng-icon name="lucideShield" size="18"
+                                class="text-electric-purple group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors"
+                                strokeWidth="1.5"></ng-icon>
+                            <span class="font-medium text-sm">Admin Panel</span>
+                        </button>
+                        }
+
+                        <div class="my-1 border-t border-gray-100 dark:border-gray-800 mx-2"></div>
+
+                        <button (click)="logout()"
+                            class="w-full flex items-center space-x-3 px-3 py-2 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors group">
+                            <ng-icon name="lucideLogOut" size="18"
+                                class="transition-transform group-hover:translate-x-1" strokeWidth="1.5"></ng-icon>
+                            <span class="font-medium text-sm">Logout</span>
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</header>

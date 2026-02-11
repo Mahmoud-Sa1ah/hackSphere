@@ -1,0 +1,134 @@
+<div
+    class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 relative overflow-hidden py-12 transition-colors duration-300">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5 pointer-events-none"
+        style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.2\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button (click)="toggleDarkMode()"
+        class="absolute top-4 right-4 p-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-gray-800/80 backdrop-blur-sm rounded-full transition-all duration-300 z-10 shadow-sm"
+        title="Toggle Theme">
+        <ng-icon *ngIf="darkMode" name="lucideSun" size="20"></ng-icon>
+        <ng-icon *ngIf="!darkMode" name="lucideMoon" size="20"></ng-icon>
+    </button>
+
+    <div class="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 relative z-10 transition-all duration-500 transform"
+        [ngClass]="mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'">
+        <!-- Logo Section -->
+        <div class="text-center mb-8">
+            <div routerLink="/"
+                class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl mb-4 shadow-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+                <ng-icon name="lucideShield" class="w-8 h-8 text-white"></ng-icon>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                HackSphere
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
+                <ng-icon name="lucideSparkles" class="w-4 h-4 text-sky-500"></ng-icon>
+                Security Testing Platform
+            </p>
+        </div>
+
+        <h3 class="text-xl font-semibold text-center text-gray-900 dark:text-white mb-8">Create Account</h3>
+
+        <form (ngSubmit)="handleSubmit()" class="space-y-6">
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Name
+                </label>
+                <div class="relative">
+                    <input type="text" [(ngModel)]="name" name="name" required
+                        class="w-full px-4 py-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-200"
+                        placeholder="Your Name" />
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 flex items-center">
+                        <ng-icon name="lucideUser" size="20"></ng-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Email
+                </label>
+                <div class="relative">
+                    <input type="email" [(ngModel)]="email" name="email" required
+                        class="w-full px-4 py-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-200"
+                        placeholder="your@email.com" />
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 flex items-center">
+                        <ng-icon name="lucideMail" size="20"></ng-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Password
+                </label>
+                <div class="relative">
+                    <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" required
+                        class="w-full px-4 py-3 pl-10 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent bg-gray-50 dark:bg-gray-700/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-200"
+                        placeholder="••••••••" />
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 flex items-center">
+                        <ng-icon name="lucideLock" size="20"></ng-icon>
+                    </div>
+                    <button type="button" (click)="toggleShowPassword()"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center">
+                        <ng-icon *ngIf="showPassword" name="lucideEyeOff" size="20"></ng-icon>
+                        <ng-icon *ngIf="!showPassword" name="lucideEye" size="20"></ng-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    User Type
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label
+                        class="relative flex flex-col items-center p-4 border rounded-xl cursor-pointer transition-all duration-200"
+                        [ngClass]="userType === 'learner' ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/20 shadow-sm' : 'border-gray-200 dark:border-gray-700 hover:border-sky-300 dark:hover:border-sky-700'">
+                        <input type="radio" name="userType" value="learner" [(ngModel)]="userType" class="sr-only" />
+                        <ng-icon name="lucideGraduationCap" size="32" class="mb-2"
+                            [ngClass]="userType === 'learner' ? 'text-sky-600 dark:text-sky-400' : 'text-gray-400'"></ng-icon>
+                        <span class="font-semibold text-sm"
+                            [ngClass]="userType === 'learner' ? 'text-sky-600 dark:text-sky-400' : 'text-gray-700 dark:text-gray-300'">
+                            Learner
+                        </span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">Basic access</span>
+                    </label>
+                    <label
+                        class="relative flex flex-col items-center p-4 border rounded-xl cursor-pointer transition-all duration-200"
+                        [ngClass]="userType === 'professional' ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/20 shadow-sm' : 'border-gray-200 dark:border-gray-700 hover:border-sky-300 dark:hover:border-sky-700'">
+                        <input type="radio" name="userType" value="professional" [(ngModel)]="userType"
+                            class="sr-only" />
+                        <ng-icon name="lucideBriefcase" size="32" class="mb-2"
+                            [ngClass]="userType === 'professional' ? 'text-sky-600 dark:text-sky-400' : 'text-gray-400'"></ng-icon>
+                        <span class="font-semibold text-sm"
+                            [ngClass]="userType === 'professional' ? 'text-sky-600 dark:text-sky-400' : 'text-gray-700 dark:text-gray-300'">
+                            Professional
+                        </span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">Advanced features</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" [disabled]="loading"
+                class="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg">
+                <span *ngIf="loading" class="flex items-center justify-center gap-2">
+                    <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Registering...
+                </span>
+                <span *ngIf="!loading">Create Account</span>
+            </button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+            Already have an account?
+            <a routerLink="/login"
+                class="text-sky-600 hover:text-sky-700 dark:text-sky-400 font-semibold hover:underline transition-all cursor-pointer">
+                Login
+            </a>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,338 @@
+<div class="min-h-full p-6 space-y-6 relative overflow-hidden">
+
+    <div *ngIf="loading"
+        class="flex items-center justify-center h-full absolute inset-0 bg-white/50 dark:bg-space-dark/50 z-50 backdrop-blur-sm">
+        <div class="text-sky-600 dark:text-sky-blue text-xl font-display animate-pulse">Loading mission control...</div>
+    </div>
+
+    <!-- Header Section -->
+    <div class="space-y-4 relative z-10">
+        <div class="flex flex-col items-center justify-center text-center py-4 animate-fade-in">
+            <div>
+                <h1
+                    class="text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-electric-purple dark:from-sky-blue dark:to-electric-purple mb-2">
+                    Security Operations Center
+                </h1>
+                <div class="text-gray-500 dark:text-gray-400 mt-1 flex items-center justify-center gap-2 text-sm">
+                    <div
+                        class="w-2 h-2 bg-sky-500 dark:bg-sky-blue rounded-full shadow-lg dark:shadow-glow-blue animate-pulse">
+                    </div>
+                    Real-time cyber intelligence dashboard
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Bar -->
+        <div
+            class="flex items-center justify-between bg-white/50 dark:bg-space-secondary/20 p-3 rounded-2xl backdrop-blur-sm border border-gray-100 dark:border-space-secondary/40 shadow-sm">
+            <div class="flex items-center space-x-3">
+                <button
+                    class="px-4 py-2 bg-white/80 dark:bg-space-secondary/50 backdrop-blur-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-space-secondary/50 rounded-lg hover:bg-white dark:hover:bg-space-secondary hover:text-sky-600 dark:hover:text-white transition-all duration-300 flex items-center space-x-2 shadow-sm group">
+                    <ng-icon name="lucideSettings" size="16"
+                        class="group-hover:rotate-90 transition-transform"></ng-icon>
+                    <span>Customize</span>
+                </button>
+                <button (click)="loadDashboard()" [disabled]="loading"
+                    class="px-4 py-2 bg-white/80 dark:bg-space-secondary/50 backdrop-blur-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-space-secondary/50 rounded-lg hover:bg-white dark:hover:bg-space-secondary hover:text-sky-600 dark:hover:text-white transition-all duration-300 flex items-center space-x-2 disabled:opacity-50 shadow-sm group">
+                    <ng-icon name="lucideRefreshCw" size="16" [class.animate-spin]="loading"></ng-icon>
+                    <span>{{ loading ? 'Refreshing...' : 'Refresh' }}</span>
+                </button>
+                <button (click)="handleExport()"
+                    class="px-4 py-2 bg-sky-600 hover:bg-sky-700 dark:bg-sky-blue dark:hover:bg-blue-600 text-white border-0 rounded-lg transition-all duration-300 flex items-center space-x-2 shadow-md dark:shadow-glow-blue hover:translate-y-[-1px]">
+                    <ng-icon name="lucideDownload" size="16"></ng-icon>
+                    <span>Export</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Date Filters and Status -->
+        <div class="flex items-center justify-between flex-wrap gap-4">
+            <div
+                class="flex items-center space-x-2 bg-white/50 dark:bg-space-secondary/30 backdrop-blur-sm p-1 rounded-lg border border-gray-200 dark:border-space-secondary/50">
+                <button (click)="onTimeFilterChange('24h')"
+                    class="px-3 py-1.5 rounded-md text-sm transition-all duration-300 cursor-pointer"
+                    [ngClass]="{'bg-sky-600 dark:bg-sky-blue text-white shadow-md': timeFilter === '24h', 'text-gray-500 dark:text-gray-400 hover:text-sky-600 dark:hover:text-white hover:bg-white dark:hover:bg-space-secondary/50': timeFilter !== '24h'}">
+                    24h
+                </button>
+                <button (click)="onTimeFilterChange('7d')"
+                    class="px-3 py-1.5 rounded-md text-sm transition-all duration-300 cursor-pointer"
+                    [ngClass]="{'bg-sky-600 dark:bg-sky-blue text-white shadow-md': timeFilter === '7d', 'text-gray-500 dark:text-gray-400 hover:text-sky-600 dark:hover:text-white hover:bg-white dark:hover:bg-space-secondary/50': timeFilter !== '7d'}">
+                    7d
+                </button>
+                <button (click)="onTimeFilterChange('30d')"
+                    class="px-3 py-1.5 rounded-md text-sm transition-all duration-300 cursor-pointer"
+                    [ngClass]="{'bg-sky-600 dark:bg-sky-blue text-white shadow-md': timeFilter === '30d', 'text-gray-500 dark:text-gray-400 hover:text-sky-600 dark:hover:text-white hover:bg-white dark:hover:bg-space-secondary/50': timeFilter !== '30d'}">
+                    30d
+                </button>
+            </div>
+
+            <div class="flex items-center space-x-6 text-sm">
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]">
+                    </div>
+                    <span class="text-gray-600 dark:text-gray-300">Live Feed Active</span>
+                </div>
+                <div class="text-gray-600 dark:text-gray-300">
+                    <span class="font-semibold text-slate-800 dark:text-white">{{ activeUsers }}</span> Active Users
+                </div>
+                <div class="flex items-center space-x-2">
+                    <ng-icon name="lucideShield" size="14" class="text-yellow-500"></ng-icon>
+                    <span class="text-gray-600 dark:text-gray-300">Threat Level: <span
+                            class="font-semibold text-yellow-500">MEDIUM</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metric Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 relative z-10">
+
+        <!-- Total Scans -->
+        <div
+            class="bg-white dark:bg-space-secondary/30 backdrop-blur-md rounded-xl p-6 border border-sky-100 dark:border-space-secondary/50 hover:border-sky-300 dark:hover:border-sky-blue/30 transition-all duration-300 group shadow-sm dark:shadow-none hover:shadow-md animate-fade-in-up">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p
+                        class="text-sm text-gray-500 dark:text-gray-400 font-medium group-hover:text-sky-600 dark:group-hover:text-sky-blue transition-colors">
+                        Total Scans</p>
+                    <p
+                        class="text-3xl font-bold text-slate-800 dark:text-white mt-1 group-hover:scale-105 transition-transform origin-left">
+                        {{ totalScans | number }}</p>
+                </div>
+                <div
+                    class="p-3 bg-sky-50 dark:bg-sky-blue/10 rounded-lg group-hover:bg-sky-100 dark:group-hover:bg-sky-blue/20 transition-colors">
+                    <ng-icon name="lucideActivity" class="text-xl text-sky-600 dark:text-sky-blue"></ng-icon>
+                </div>
+            </div>
+            <div class="flex items-center text-sm font-medium"
+                [ngClass]="scansChange >= 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'">
+                <ng-icon name="lucideTrendingUp" size="16" class="mr-1" [class.rotate-180]="scansChange < 0"></ng-icon>
+                <span>{{ scansChange >= 0 ? '+' : '' }}{{ scansChange }}% from last week</span>
+            </div>
+        </div>
+
+        <!-- Vulnerabilities -->
+        <div
+            class="bg-white dark:bg-space-secondary/30 backdrop-blur-md rounded-xl p-6 border border-sky-100 dark:border-space-secondary/50 hover:border-red-300 dark:hover:border-red-500/30 transition-all duration-300 group shadow-sm dark:shadow-none hover:shadow-md animate-fade-in-up delay-100">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p
+                        class="text-sm text-gray-500 dark:text-gray-400 font-medium group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors">
+                        Vulnerabilities</p>
+                    <p
+                        class="text-3xl font-bold text-slate-800 dark:text-white mt-1 group-hover:scale-105 transition-transform origin-left">
+                        {{ vulnerabilities }}</p>
+                </div>
+                <div
+                    class="p-3 bg-red-50 dark:bg-red-500/10 rounded-lg group-hover:bg-red-100 dark:group-hover:bg-red-500/20 transition-colors">
+                    <ng-icon name="lucideTriangleAlert" class="text-xl text-red-500"></ng-icon>
+                </div>
+            </div>
+            <div class="flex items-center text-sm font-medium"
+                [ngClass]="vulnerabilitiesChange >= 0 ? 'text-red-500 dark:text-red-400' : 'text-green-500 dark:text-green-400'">
+                <ng-icon name="lucideTrendingUp" size="16" class="mr-1"
+                    [class.rotate-180]="vulnerabilitiesChange >= 0"></ng-icon>
+                <span>{{ vulnerabilitiesChange >= 0 ? '+' : '' }}{{ vulnerabilitiesChange }}% from last week</span>
+            </div>
+        </div>
+
+        <!-- Tools Used -->
+        <div
+            class="bg-white dark:bg-space-secondary/30 backdrop-blur-md rounded-xl p-6 border border-sky-100 dark:border-space-secondary/50 hover:border-purple-300 dark:hover:border-electric-purple/30 transition-all duration-300 group shadow-sm dark:shadow-none hover:shadow-md animate-fade-in-up delay-200">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p
+                        class="text-sm text-gray-500 dark:text-gray-400 font-medium group-hover:text-electric-purple transition-colors">
+                        Tools Used</p>
+                    <p
+                        class="text-3xl font-bold text-slate-800 dark:text-white mt-1 group-hover:scale-105 transition-transform origin-left">
+                        {{ toolsUsed }}</p>
+                </div>
+                <div
+                    class="p-3 bg-purple-50 dark:bg-electric-purple/10 rounded-lg group-hover:bg-purple-100 dark:group-hover:bg-electric-purple/20 transition-colors">
+                    <ng-icon name="lucideZap" class="text-xl text-electric-purple"></ng-icon>
+                </div>
+            </div>
+            <div class="flex items-center text-sm font-medium"
+                [ngClass]="toolsUsedChange >= 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'">
+                <ng-icon name="lucideTrendingUp" size="16" class="mr-1"
+                    [class.rotate-180]="toolsUsedChange < 0"></ng-icon>
+                <span>{{ toolsUsedChange >= 0 ? '+' : '' }}{{ toolsUsedChange }}% from last week</span>
+            </div>
+        </div>
+
+        <!-- Active Users -->
+        <div
+            class="bg-white dark:bg-space-secondary/30 backdrop-blur-md rounded-xl p-6 border border-sky-100 dark:border-space-secondary/50 hover:border-green-300 dark:hover:border-green-500/30 transition-all duration-300 group shadow-sm dark:shadow-none hover:shadow-md animate-fade-in-up delay-300">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p
+                        class="text-sm text-gray-500 dark:text-gray-400 font-medium group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors">
+                        Active Users</p>
+                    <p
+                        class="text-3xl font-bold text-slate-800 dark:text-white mt-1 group-hover:scale-105 transition-transform origin-left">
+                        {{ activeUsers }}</p>
+                </div>
+                <div
+                    class="p-3 bg-green-50 dark:bg-green-500/10 rounded-lg group-hover:bg-green-100 dark:group-hover:bg-green-500/20 transition-colors">
+                    <ng-icon name="lucideUsers" class="text-xl text-green-500"></ng-icon>
+                </div>
+            </div>
+            <div class="flex items-center text-green-500 dark:text-green-400 text-sm font-medium">
+                <ng-icon name="lucideTrendingUp" size="16" class="mr-1"></ng-icon>
+                <span>+3 new this week</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10 w-full">
+        <!-- Real-time Tool Analytics -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 animate-fade-in-up"
+                style="animation-delay: 0.5s;">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Real-time Tool Analytics</h2>
+                    <div class="flex items-center space-x-2">
+                        <button
+                            class="px-3 py-1 bg-green-500/20 text-green-500 rounded text-sm flex items-center space-x-1">
+                            <ng-icon name="lucideRadio" size="12"></ng-icon>
+                            <span>Live Data</span>
+                        </button>
+                        <button
+                            class="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">
+                            <ng-icon name="lucideMaximize2" size="16"></ng-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- System Health Graph -->
+                <div class="mb-6 h-[250px] overflow-hidden w-full relative">
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">System Health %</p>
+                    <ngx-charts-line-chart class="w-full h-full" [scheme]="colorScheme"
+                        [results]="systemHealthChartData" [gradient]="true" [xAxis]="true" [yAxis]="true"
+                        [showXAxisLabel]="false" [showYAxisLabel]="false" [autoScale]="true" [timeline]="true">
+                    </ngx-charts-line-chart>
+                </div>
+
+                <!-- Tool Category Usage -->
+                <div class="space-y-4">
+                    <ng-container *ngIf="sortedToolUsage.length > 0; else noUsage">
+                        <div *ngFor="let category of sortedToolUsage; let i = index" class="animate-fade-in-up"
+                            [style.animation-delay]="(i * 0.1) + 's'">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-gray-900 dark:text-white font-semibold">{{ category.category
+                                        }}</span>
+                                    <span class="text-gray-600 dark:text-gray-500 text-sm">({{ category.tools }}
+                                        tools)</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-gray-900 dark:text-white font-bold text-lg">{{ category.usage
+                                        }}</span>
+                                    <span class="text-gray-600 dark:text-gray-500 text-sm">scans</span>
+                                </div>
+                            </div>
+                            <div
+                                class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden shadow-inner">
+                                <div class="h-3 rounded-full bg-gradient-to-r transition-all duration-1000"
+                                    [ngClass]="getGradient(i)" [style.width]="calcWidth(category.usage)"></div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #noUsage>
+                        <div class="text-center py-4 text-gray-600 dark:text-gray-400 text-sm">No tool usage data
+                            available</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Activity Feed -->
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 animate-fade-in-up"
+            style="animation-delay: 0.6s;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Live Activity Feed</h2>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-green-500 text-sm font-medium">Live</span>
+                </div>
+            </div>
+            <div class="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                <ng-container *ngIf="(data?.activityFeed?.length ?? 0) > 0; else noActivity">
+                    <div *ngFor="let activity of data?.activityFeed || []; let i = index"
+                        class="flex items-start space-x-3 p-4 bg-gradient-to-r from-gray-50 to-gray-100/50 dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] animate-fade-in-up"
+                        [style.animation-delay]="(i * 0.1) + 's'">
+                        <div class="p-2 bg-sky-500/10 rounded-lg shrink-0">
+                            <ng-icon name="lucideShield" class="text-xl text-sky-500"></ng-icon>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-gray-900 dark:text-white text-sm font-medium truncate">{{ activity.message }}
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-400 text-xs mt-1">{{ activity.time }}</p>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #noActivity>
+                    <div class="text-center py-8 text-gray-600 dark:text-gray-400 text-sm">No recent activity</div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Category Percentages -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative z-10">
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up"
+            style="animation-delay: 0.7s;">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-gray-600 dark:text-gray-400 text-sm font-medium">Web Security</span>
+                <span
+                    class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">85%</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-cyan-600 h-3 rounded-full transition-all duration-1000 animate-progress"
+                    style="width: 85%"></div>
+            </div>
+        </div>
+
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up"
+            style="animation-delay: 0.8s;">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-gray-600 dark:text-gray-400 text-sm font-medium">Network Security</span>
+                <span
+                    class="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">72%</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                <div class="bg-gradient-to-r from-green-600 to-emerald-600 h-3 rounded-full transition-all duration-1000 animate-progress"
+                    style="width: 72%"></div>
+            </div>
+        </div>
+
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up"
+            style="animation-delay: 0.9s;">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-gray-600 dark:text-gray-400 text-sm font-medium">Vulnerability Assessment</span>
+                <span
+                    class="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">68%</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                <div class="bg-gradient-to-r from-orange-600 to-red-600 h-3 rounded-full transition-all duration-1000 animate-progress"
+                    style="width: 68%"></div>
+            </div>
+        </div>
+
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 animate-fade-in-up"
+            style="animation-delay: 1.0s;">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-gray-600 dark:text-gray-400 text-sm font-medium">AI Analysis</span>
+                <span
+                    class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">45%</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                <div class="bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full transition-all duration-1000 animate-progress"
+                    style="width: 45%"></div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,22 @@
+.editor-content {
+    outline: none;
+    min-height: 300px;
+}
+
+.editor-content:empty:before {
+    content: attr(placeholder);
+    color: #9ca3af;
+    /* gray-400 */
+    position: absolute;
+    pointer-events: none;
+}
+
+/* Hide default resizing handles in some browsers */
+.editor-content img {
+    resize: none;
+}
+
+/* Overlay needs to be above content */
+.resize-overlay {
+    z-index: 10;
+}

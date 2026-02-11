@@ -1,0 +1,319 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 space-y-6" *ngIf="tool">
+    <!-- Top Navigation -->
+    <button (click)="goBack()" class="flex items-center text-blue-600 hover:text-blue-700 font-medium transition-colors"
+        title="Back to Tools List">
+        <ng-icon name="lucideArrowLeft" class="w-4 h-4 mr-2"></ng-icon>
+        Back to Tools
+    </button>
+
+    <!-- Header Banner -->
+    <div
+        class="bg-gradient-to-r {{config.bg}} to-gray-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden">
+        <div class="relative z-10 flex justify-between items-start">
+            <div class="flex items-start space-x-6">
+                <div
+                    class="p-4 bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl shadow-lg border border-gray-600">
+                    <ng-icon [name]="config.iconName" class="w-10 h-10 text-white"></ng-icon>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                        {{ tool.toolName }} Console
+                    </h1>
+                    <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                        <span class="text-sm font-semibold px-2 py-0.5 rounded border border-opacity-20"
+                            [ngClass]="[config.bg, config.color]">
+                            {{ tool.category }}
+                        </span>
+                        <span>{{ tool.description }}</span>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-semibold flex items-center space-x-2 border border-blue-200 dark:border-blue-800">
+                <ng-icon name="lucideActivity" class="w-4 h-4 animate-pulse"></ng-icon>
+                <span>Ready</span>
+            </div>
+        </div>
+
+        <!-- Quick Stats/Info Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8 relative z-10">
+            <div *ngFor="let stat of stats"
+                class="bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 dark:border-gray-600 shadow-sm flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase">{{ stat.label }}</p>
+                    <p class="text-lg font-bold text-gray-900 dark:text-white">{{ stat.value }}</p>
+                </div>
+                <div class="p-2 rounded-lg {{stat.bg}} {{stat.color}} dark:bg-gray-600">
+                    <ng-icon [name]="stat.iconName" class="w-5 h-5"></ng-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-xl p-4 flex items-start space-x-3">
+        <ng-icon name="lucideTriangleAlert"
+            class="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5"></ng-icon>
+        <div>
+            <h3 class="text-sm font-semibold text-amber-900 dark:text-amber-400">Authorized Testing Only</h3>
+            <p class="text-sm text-amber-800 dark:text-amber-300/80 mt-1">
+                Only test applications/networks you own or have explicit permission to test. Unauthorized testing is
+                illegal.
+            </p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+        <!-- Left Column: Controls -->
+        <div class="lg:col-span-2 space-y-6">
+            <div
+                class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div
+                    class="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center space-x-2 bg-gray-50/50 dark:bg-gray-800/50">
+                    <ng-icon name="lucideTerminal" class="w-5 h-5 text-gray-500"></ng-icon>
+                    <h2 class="font-semibold text-gray-900 dark:text-white">Execution Parameters</h2>
+                </div>
+
+                <div class="p-6 space-y-6">
+                    <div>
+                        <label
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center space-x-2">
+                            <div class="w-2 h-2 rounded-full {{config.color.replace('text-', 'bg-')}}"></div>
+                            <span>Target</span>
+                        </label>
+                        <input type="text" [(ngModel)]="target" [placeholder]="config.placeholder"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all font-mono text-sm" />
+                        <p class="text-xs text-gray-500 mt-2 flex items-center">
+                            <ng-icon name="lucideSearch" class="w-3 h-3 mr-1"></ng-icon>
+                            Define the target scope clearly
+                        </p>
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center space-x-2">
+                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                            <span>Configuration Mode</span>
+                        </label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button (click)="attackType = 'quick'"
+                                class="p-4 rounded-xl border text-left transition-all"
+                                [ngClass]="attackType === 'quick' ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 ring-1 ring-blue-500' : 'border-gray-200 dark:border-gray-700 hover:border-blue-300'">
+                                <div class="font-medium text-gray-900 dark:text-white flex items-center">
+                                    <ng-icon name="lucideZap" class="w-4 h-4 text-orange-500 mr-2"></ng-icon>
+                                    Quick Scan
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Default enumeration & discovery
+                                </p>
+                            </button>
+                            <button (click)="attackType = 'custom'"
+                                class="p-4 rounded-xl border text-left transition-all"
+                                [ngClass]="attackType === 'custom' ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 ring-1 ring-blue-500' : 'border-gray-200 dark:border-gray-700 hover:border-blue-300'">
+                                <div class="font-medium text-gray-900 dark:text-white flex items-center">
+                                    <ng-icon name="lucideTerminal" class="w-4 h-4 text-purple-500 mr-2"></ng-icon>
+                                    Custom Arguments
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Manual arguments and flags</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="attackType === 'custom'" class="animate-fade-in">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Command Line Arguments
+                        </label>
+                        <div class="animate-fade-in">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Select Scan Profile
+                            </label>
+                            <select [(ngModel)]="customArgs"
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm">
+                                <option value="" disabled>Select a profile...</option>
+                                <option *ngFor="let payload of config.payloads" [value]="payload">{{ payload }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                        <p class="text-sm font-medium text-gray-900 dark:text-gray-300 mb-2 flex items-center">
+                            <ng-icon name="lucideDatabase" class="w-4 h-4 mr-2"></ng-icon>
+                            Recommended Arguments
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <button *ngFor="let p of config.payloads" (click)="customArgs = p; attackType = 'custom'"
+                                class="px-3 py-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-mono text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                                {{ p }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Professional Features -->
+                    <div *ngIf="isPro"
+                        class="space-y-4 pt-4 border-t border-gray-100 dark:border-gray-700 animate-fade-in">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span
+                                class="px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-bold uppercase rounded tracking-wider">PRO</span>
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Advanced Options</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Tool
+                                Version</label>
+                            <input type="text" [(ngModel)]="toolVersion" placeholder="e.g. 7.94"
+                                class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm" />
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Local Binary
+                                Path override</label>
+                            <input type="text" [(ngModel)]="localFilePath" placeholder="e.g. /usr/local/bin/nmap-custom"
+                                class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm" />
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3 pt-2">
+                        <button (click)="handleLaunch()" [disabled]="loading"
+                            class="flex-1 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 flex items-center justify-center transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed">
+                            <ng-container *ngIf="loading; else launchBtn">
+                                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                                Executing...
+                            </ng-container>
+                            <ng-template #launchBtn>
+                                <ng-icon name="lucidePlay" class="w-5 h-5 mr-2 fill-current"></ng-icon>
+                                Launch Operation
+                            </ng-template>
+                        </button>
+
+                        <button *ngIf="loading" (click)="handleStop()"
+                            class="px-6 py-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow-lg shadow-red-500/30 flex items-center justify-center transition-all transform hover:scale-[1.05] active:scale-[0.95]"
+                            title="Stop Operation">
+                            <div class="w-4 h-4 rounded-sm bg-white"></div>
+                        </button>
+
+                        <button *ngIf="currentScanId && !loading" (click)="handleDownloadReport()"
+                            class="px-6 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 flex items-center justify-center transition-all transform hover:scale-[1.05] active:scale-[0.95]"
+                            title="Download Report">
+                            <ng-icon name="lucideDownload" class="w-5 h-5 text-white"></ng-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Output/Stats -->
+        <div class="h-full flex flex-col">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden transition-all duration-300"
+                [ngClass]="isConsoleExpanded ? 'h-auto' : 'flex-1'">
+                <div class="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-gray-50/50 dark:bg-gray-800/50 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+                    (click)="toggleConsole()">
+                    <div class="flex items-center space-x-2">
+                        <ng-icon name="lucideActivity" class="w-5 h-5 text-gray-500"></ng-icon>
+                        <h2 class="font-semibold text-gray-900 dark:text-white">Console Output</h2>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ isConsoleExpanded
+                            ? 'COLLAPSE' : 'EXPAND' }}</span>
+                        <ng-icon [name]="isConsoleExpanded ? 'lucideChevronUp' : 'lucideChevronDown'"
+                            class="w-4 h-4 text-gray-400"></ng-icon>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-gray-900 rounded-b-2xl overflow-hidden flex flex-col transition-all duration-300 ease-in-out"
+                    [ngClass]="isConsoleExpanded ? 'min-h-[400px] h-auto' : 'flex-1'">
+                    <div class="font-mono text-sm text-green-400 whitespace-pre-wrap overflow-y-auto custom-scrollbar"
+                        [ngClass]="isConsoleExpanded ? 'max-h-[800px]' : 'flex-1'" #outputContainer>
+                        <div *ngIf="output.length > 0; else emptyOutput">
+                            <div *ngFor="let line of output">{{ line }}</div>
+                        </div>
+                    </div>
+                    <ng-template #emptyOutput>
+                        <div
+                            class="flex-1 flex flex-col items-center justify-center text-gray-600 dark:text-gray-500 h-full">
+                            <ng-icon [name]="config.iconName" size="64" class="mb-4 opacity-20"></ng-icon>
+                            <p>Ready to execute {{ tool.toolName }}</p>
+                            <p class="text-xs mt-2">Results will stream here</p>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Insights Section -->
+        <div *ngIf="aiSummary"
+            class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl shadow-sm border border-indigo-100 dark:border-indigo-800 p-6 animate-fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg shadow-md">
+                        <ng-icon name="lucideZap" class="w-5 h-5 text-white"></ng-icon>
+                    </div>
+                    <h2
+                        class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        AI Security Insights</h2>
+                </div>
+                <span
+                    class="px-3 py-1 bg-white/50 dark:bg-gray-800/50 rounded-full text-[10px] font-bold text-indigo-500 uppercase tracking-widest border border-indigo-200/50">Gemini
+                    Pro Analysis</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Summary -->
+                <div class="space-y-3">
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center">
+                        <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-2"></div>
+                        Findings Summary
+                    </h3>
+                    <div
+                        class="bg-white/80 dark:bg-gray-800/80 rounded-xl p-4 border border-indigo-100/50 dark:border-indigo-700/50 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {{ aiSummary }}
+                    </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="space-y-3" *ngIf="aiNextSteps">
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center">
+                        <div class="w-1.5 h-1.5 rounded-full bg-purple-500 mr-2"></div>
+                        Recommended Next Steps
+                    </h3>
+                    <div
+                        class="bg-white/80 dark:bg-gray-800/80 rounded-xl p-4 border border-purple-100/50 dark:border-purple-700/50 text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+                        {{ aiNextSteps }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Knowledge Base Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center space-x-2 mb-4">
+            <div class="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
+                <div class="w-5 h-5 text-yellow-600 dark:text-yellow-400">💡</div>
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">{{ tool.toolName }} Knowledge Base</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-blue-50 dark:bg-gray-700/50 rounded-xl p-5 border border-blue-100 dark:border-gray-600">
+                <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-2 flex items-center">
+                    <div class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2"></div>
+                    About this Tool
+                </h3>
+                <p class="text-sm text-blue-800 dark:text-gray-300 leading-relaxed">
+                    {{ config.kbWhatIs }}
+                </p>
+            </div>
+            <div class="bg-green-50 dark:bg-gray-700/50 rounded-xl p-5 border border-green-100 dark:border-gray-600">
+                <h3 class="font-semibold text-green-900 dark:text-green-100 mb-2 flex items-center">
+                    <div class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></div>
+                    Mitigation Strategies
+                </h3>
+                <ul class="text-sm text-green-800 dark:text-gray-300 space-y-2">
+                    <li *ngFor="let item of config.kbPrevention" class="flex items-start">
+                        <div class="w-1 h-1 bg-green-500 rounded-full mt-1.5 mr-2"></div>
+                        {{ item }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

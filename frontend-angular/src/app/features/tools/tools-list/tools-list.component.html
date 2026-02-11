@@ -1,0 +1,113 @@
+<div class="space-y-6">
+    <div class="flex flex-col items-center justify-center py-6 animate-fade-in">
+        <h1
+            class="text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-electric-purple dark:from-sky-blue dark:to-electric-purple mb-2">
+            Tools Library</h1>
+        <p class="text-gray-500 dark:text-gray-400 max-w-2xl text-center">Access and manage your security toolset from a
+            centralized command center</p>
+    </div>
+
+    <!-- Search and Category Filter -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 space-y-3 border border-gray-200 dark:border-gray-700">
+        <div class="relative">
+            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <ng-icon name="lucideSearch" size="20"></ng-icon>
+            </div>
+            <input type="text" placeholder="Search tools..." [(ngModel)]="searchTerm" (ngModelChange)="filterTools()"
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors" />
+        </div>
+        <div *ngIf="categoryFilter" class="flex items-center space-x-2 animate-fade-in">
+            <span class="text-sm text-gray-600 dark:text-gray-400">Filtered by:</span>
+            <span
+                class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium flex items-center gap-1">
+                {{ categoryFilter }}
+                <button (click)="setCategoryFilter('')"
+                    class="p-0.5 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-white rounded-full transition-colors"
+                    title="Clear filter">
+                    <ng-icon name="lucideX" size="14"></ng-icon>
+                </button>
+            </span>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12 text-gray-500 dark:text-gray-400">
+        <div class="w-12 h-12 border-4 border-t-blue-600 border-blue-200 rounded-full animate-spin mx-auto mb-4"></div>
+        Loading tools...
+    </div>
+
+    <!-- Tools Grid -->
+    <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let tool of filteredTools"
+            class="group relative bg-gradient-to-br from-white to-sky-50/50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-gray-700 p-6 flex flex-col h-full animate-fade-in-up">
+
+            <!-- Card Header -->
+            <div class="flex items-start justify-between mb-4">
+                <div class="space-y-1">
+                    <h3
+                        class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-sky-blue transition-colors duration-300">
+                        {{ tool.toolName }}
+                    </h3>
+                    <button (click)="setCategoryFilter(tool.category)"
+                        class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/30 text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-sky-400 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors">
+                        {{ tool.category }}
+                    </button>
+                </div>
+
+                <!-- Tooltip for Download Guide -->
+                <div class="tooltip-container">
+                    <button (click)="handleDownloadZip(tool)"
+                        class="p-2.5 text-gray-400 hover:text-blue-600 dark:hover:text-sky-blue transition-all duration-300 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 border border-transparent hover:border-blue-100 dark:hover:border-blue-900/50"
+                        aria-label="Download Guide">
+                        <ng-icon name="lucideDownload" size="20"></ng-icon>
+                    </button>
+                    <span class="tooltip-text">Click to download the guide on how to use this tool.</span>
+                </div>
+            </div>
+
+            <!-- Card Body -->
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 flex-grow leading-relaxed line-clamp-3">
+                {{ tool.description }}
+            </p>
+
+            <!-- Card Footer -->
+            <div class="mt-auto space-y-4">
+                <!-- Status Badge -->
+                <div
+                    class="flex items-center space-x-2 text-emerald-500 dark:text-emerald-400 text-xs font-bold uppercase tracking-wide">
+                    <div class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </div>
+                    <span>Ready to Run</span>
+                </div>
+
+                <!-- Primary Action -->
+                <button (click)="handleRunTool(tool)"
+                    class="group/btn w-full flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 active:scale-95">
+                    <ng-icon name="lucidePlay" size="18"
+                        class="group-hover/btn:translate-x-0.5 transition-transform"></ng-icon>
+                    <span>Run Tool</span>
+                </button>
+
+                <!-- Optional Secondary Download -->
+                <button *ngIf="tool.downloadUrl" (click)="handleDownloadTool(tool)"
+                    class="w-full flex items-center justify-center space-x-2 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 font-semibold py-2.5 px-4 rounded-xl transition-all duration-300 border border-gray-200 dark:border-gray-700">
+                    <ng-icon name="lucideDownload" size="16"></ng-icon>
+                    <span class="text-xs">Download Binary</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && filteredTools.length === 0"
+        class="text-center py-12 text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
+        <ng-icon name="lucideInfo" size="32" class="mb-2 opacity-50"></ng-icon>
+        <p>No tools found matching your criteria</p>
+        <button (click)="searchTerm=''; categoryFilter=''"
+            class="mt-2 text-blue-600 dark:text-blue-400 hover:underline">
+            Reset filters
+        </button>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend-api",
+    "\\backend-api\\Models",
+    "\\backend-api\\Services",
+    "\\backend-api\\wwwroot",
+    "\\backend-api\\wwwroot\\uploads",
+    "\\frontend-react",
+    "\\frontend-react\\src",
+    "\\frontend-react\\src\\components",
+    "\\frontend-react\\src\\pages"
+  ],
+  "SelectedNode": "\\frontend-react\\src\\pages\\Admin.tsx",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,18 @@
+{
+    "/api": {
+        "target": "https://localhost:53812",
+        "secure": false,
+        "changeOrigin": true
+    },
+    "/uploads": {
+        "target": "https://localhost:53812",
+        "secure": false,
+        "changeOrigin": true
+    },
+    "/hubs": {
+        "target": "https://localhost:53812",
+        "secure": false,
+        "ws": true,
+        "changeOrigin": true
+    }
+}

@@ -1,0 +1,109 @@
+<aside
+    class="bg-white dark:bg-space-light border-r border-sky-100 dark:border-space-secondary/30 transition-all duration-300 flex flex-col h-full z-40 shadow-xl dark:shadow-2xl"
+    [ngClass]="collapsed() ? 'w-16' : 'w-64'">
+    <!-- Logo Section -->
+    <div class="p-4 flex items-center justify-between border-b border-sky-100 dark:border-space-secondary/30">
+        @if (!collapsed()) {
+        <div class="animate-in fade-in duration-300">
+            <h2
+                class="text-xl font-display font-bold text-sky-700 dark:text-white tracking-widest drop-shadow-sm dark:drop-shadow-md">
+                HackSphere</h2>
+            <p class="text-[10px] text-sky-500 dark:text-sky-blue font-semibold uppercase tracking-widest mt-0.5">
+                Hacking the Sky</p>
+        </div>
+        }
+        <button (click)="toggleCollapse()"
+            class="p-2 text-sky-400 dark:text-gray-500 hover:text-sky-700 dark:hover:text-white hover:bg-sky-50 dark:hover:bg-space-secondary/50 rounded-lg transition-all duration-300">
+            <ng-icon name="lucideChevronLeft" size="18" class="transition-transform duration-300"
+                [class.rotate-180]="collapsed()"></ng-icon>
+        </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto py-4 space-y-6 scrollbar-thin scrollbar-thumb-sky-200 dark:scrollbar-thumb-space-secondary scrollbar-track-transparent"
+        [ngClass]="collapsed() ? 'px-2' : 'px-4'">
+        <!-- Dashboard -->
+        <a routerLink="/dashboard" routerLinkActive #rlaDashboard="routerLinkActive"
+            [ngClass]="rlaDashboard.isActive 
+        ? 'bg-sky-100 dark:bg-sky-blue/20 text-sky-700 dark:text-sky-blue border-sky-200 dark:border-sky-blue/30 shadow-sm dark:shadow-glow-blue' 
+        : 'text-gray-600 dark:text-gray-400 hover:bg-sky-50 dark:hover:bg-space-secondary/30 hover:text-sky-600 dark:hover:text-white'"
+            class="flex items-center px-3 py-3 rounded-lg transition-all duration-200 font-medium border border-transparent"
+            [ngClass]="{'justify-center': collapsed(), 'space-x-3': !collapsed()}">
+            <ng-icon name="lucideLayoutDashboard" size="20" strokeWidth="1.5" class="shrink-0"></ng-icon>
+            @if (!collapsed()) { <span>Dashboard</span> }
+        </a>
+
+        <!-- Tools Link -->
+        <a routerLink="/tools" routerLinkActive #rlaTools="routerLinkActive"
+            [ngClass]="rlaTools.isActive 
+        ? 'bg-sky-100 dark:bg-sky-blue/20 text-sky-700 dark:text-sky-blue border-sky-200 dark:border-sky-blue/30 shadow-sm dark:shadow-glow-blue' 
+        : 'text-gray-600 dark:text-gray-400 hover:bg-sky-50 dark:hover:bg-space-secondary/30 hover:text-sky-600 dark:hover:text-white'"
+            class="flex items-center px-3 py-3 rounded-lg transition-all duration-200 font-medium border border-transparent"
+            [ngClass]="{'justify-center': collapsed(), 'space-x-3': !collapsed()}">
+            <ng-icon name="lucideWrench" size="20" strokeWidth="1.5" class="shrink-0"></ng-icon>
+            @if (!collapsed()) { <span>Tools</span> }
+        </a>
+
+        <!-- Security Tools Section -->
+        @if (!collapsed()) {
+        <div class="animate-in fade-in duration-500 delay-100">
+            <h3
+                class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3 px-4 flex items-center">
+                <span class="w-8 h-[1px] bg-gray-200 dark:bg-space-secondary mr-2"></span>
+                Security Tools
+            </h3>
+            <div class="space-y-1">
+                @for (tool of securityTools; track tool.label) {
+                <div (click)="handleCategoryClick(tool.label)"
+                    class="group flex items-center justify-between px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-sky-50 dark:hover:bg-space-secondary/30 hover:text-sky-600 dark:hover:text-sky-blue rounded-lg cursor-pointer transition-all duration-200 border border-transparent hover:border-sky-100 dark:hover:border-sky-blue/20">
+                    <div class="flex items-center space-x-3">
+                        <ng-icon [name]="tool.icon" size="18"
+                            class="transition-transform duration-200 group-hover:scale-110" strokeWidth="1.5"></ng-icon>
+                        <span class="text-sm font-medium">{{ tool.label }}</span>
+                    </div>
+                    <span
+                        class="text-[10px] font-medium bg-gray-100 dark:bg-space-secondary/50 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded-full group-hover:bg-sky-100 dark:group-hover:bg-sky-blue/20 group-hover:text-sky-600 dark:group-hover:text-sky-blue transition-colors">
+                        {{ tool.count }}
+                    </span>
+                </div>
+                }
+            </div>
+        </div>
+        }
+
+        <!-- AI Assistant -->
+        <a routerLink="/ai-assistant" routerLinkActive #rlaAI="routerLinkActive"
+            [ngClass]="rlaAI.isActive 
+        ? 'bg-purple-100 dark:bg-electric-purple/20 text-electric-purple dark:text-electric-purple border-purple-200 dark:border-electric-purple/30 shadow-sm dark:shadow-glow-purple' 
+        : 'text-gray-600 dark:text-gray-400 hover:bg-purple-50 dark:hover:bg-space-secondary/30 hover:text-electric-purple dark:hover:text-white'"
+            class="flex items-center px-3 py-3 rounded-lg transition-all duration-200 font-medium border border-transparent"
+            [ngClass]="{'justify-center': collapsed(), 'space-x-3': !collapsed()}">
+            <ng-icon name="lucideBrain" size="20" strokeWidth="1.5" class="shrink-0"></ng-icon>
+            @if (!collapsed()) { <span>AI Assistant</span> }
+        </a>
+
+        <!-- Resources Section -->
+        <div class="animate-in fade-in duration-500 delay-200">
+            @if (!collapsed()) {
+            <h3
+                class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3 px-4 flex items-center">
+                <span class="w-8 h-[1px] bg-gray-200 dark:bg-space-secondary mr-2"></span>
+                Resources
+            </h3>
+            }
+            <div class="space-y-1">
+                @for (resource of resources; track resource.path) {
+                <a [routerLink]="resource.path" routerLinkActive #rlaRes="routerLinkActive"
+                    [ngClass]="rlaRes.isActive 
+              ? 'text-sky-700 dark:text-sky-blue font-semibold bg-sky-50 dark:bg-sky-blue/10 border-sky-100 dark:border-sky-blue/20' 
+              : 'text-gray-600 dark:text-gray-400 hover:bg-sky-50 dark:hover:bg-space-secondary/30 hover:text-sky-600 dark:hover:text-white'"
+                    class="flex items-center px-3 py-2 rounded-lg transition-all duration-200 border border-transparent"
+                    [ngClass]="{'justify-center': collapsed(), 'space-x-3': !collapsed()}"
+                    [title]="collapsed() ? resource.label : ''">
+                    <ng-icon [name]="resource.icon" size="18" strokeWidth="1.5" class="shrink-0"></ng-icon>
+                    @if (!collapsed()) { <span class="text-sm font-medium">{{ resource.label }}</span> }
+                </a>
+                }
+            </div>
+        </div>
+    </nav>
+</aside>

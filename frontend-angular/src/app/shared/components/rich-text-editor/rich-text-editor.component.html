@@ -1,0 +1,105 @@
+<div
+    class="rich-text-editor-container border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-800 transition-all focus-within:ring-2 focus-within:ring-blue-500/50">
+
+    <!-- Toolbar -->
+    <div
+        class="toolbar flex items-center gap-1 p-2 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 text-gray-700 dark:text-gray-300">
+        <button (click)="execCommand('bold')"
+            class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            [class.bg-gray-200]="isActiveBold" title="Bold">
+            <ng-icon name="lucideBold" size="18"></ng-icon>
+        </button>
+        <button (click)="execCommand('italic')"
+            class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            [class.bg-gray-200]="isActiveItalic" title="Italic">
+            <ng-icon name="lucideItalic" size="18"></ng-icon>
+        </button>
+        <div class="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+        <button (click)="execCommand('formatBlock', 'H1')"
+            class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Heading 1">
+            <ng-icon name="lucideHeading1" size="18"></ng-icon>
+        </button>
+        <button (click)="execCommand('formatBlock', 'H2')"
+            class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Heading 2">
+            <ng-icon name="lucideHeading2" size="18"></ng-icon>
+        </button>
+        <button (click)="execCommand('formatBlock', 'P')"
+            class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Paragraph">
+            P
+        </button>
+        <div class="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+        <button (click)="execCommand('insertUnorderedList')"
+            class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Bullet List">
+            <ng-icon name="lucideList" size="18"></ng-icon>
+        </button>
+        <button (click)="execCommand('insertOrderedList')"
+            class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Numbered List">
+            <ng-icon name="lucideListOrdered" size="18"></ng-icon>
+        </button>
+        <button (click)="execCommand('formatBlock', 'PRE')"
+            class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Code Block">
+            <ng-icon name="lucideCode" size="18"></ng-icon>
+        </button>
+        <div class="flex-1"></div>
+
+        <!-- Image Upload Button -->
+        <button (click)="triggerImageUpload()"
+            class="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            title="Insert Image">
+            <ng-icon name="lucideImage" size="16"></ng-icon>
+            <span class="hidden sm:inline">Add Image</span>
+        </button>
+    </div>
+
+    <!-- Editor Body -->
+    <div class="relative" (click)="handleEditorClick($event)">
+        <div #editor
+            class="editor-content p-6 min-h-[300px] outline-none prose dark:prose-invert max-w-none prose-img:rounded-xl prose-img:shadow-sm"
+            contenteditable="true" [attr.placeholder]="placeholder" (input)="onInput($event)" (blur)="onBlur()"
+            (drop)="onDrop($event)" (dragover)="onDragOver($event)">
+        </div>
+
+        <!-- Placeholder text when empty -->
+        <div *ngIf="content === '' || content === '<br>'"
+            class="absolute top-6 left-6 text-gray-400 pointer-events-none select-none">
+            {{ placeholder }}
+        </div>
+
+        <!-- Resize & Alignment Overlay -->
+        <div *ngIf="selectedImage" class="absolute border-2 border-blue-500 pointer-events-none resize-overlay"
+            [style.top.px]="overlayTop" [style.left.px]="overlayLeft" [style.width.px]="overlayWidth"
+            [style.height.px]="overlayHeight">
+
+            <!-- Alignment Controls (Above Image) -->
+            <div
+                class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg flex border border-gray-200 dark:border-gray-700 pointer-events-auto p-1 gap-1 z-50">
+                <button (click)="alignImage('left')"
+                    class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-600 dark:text-gray-300"
+                    title="Align Left">
+                    <ng-icon name="lucideAlignLeft" size="16"></ng-icon>
+                </button>
+                <button (click)="alignImage('center')"
+                    class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-600 dark:text-gray-300"
+                    title="Align Center">
+                    <ng-icon name="lucideAlignCenter" size="16"></ng-icon>
+                </button>
+                <button (click)="alignImage('right')"
+                    class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-600 dark:text-gray-300"
+                    title="Align Right">
+                    <ng-icon name="lucideAlignRight" size="16"></ng-icon>
+                </button>
+            </div>
+
+            <!-- Resize Handle (Bottom Right) -->
+            <div class="absolute bottom-[-6px] right-[-6px] w-4 h-4 bg-blue-500 rounded-full cursor-se-resize pointer-events-auto shadow-sm border border-white z-50"
+                (mousedown)="startResize($event)"></div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div
+        class="px-4 py-2 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30 text-xs text-gray-400 flex justify-between">
+        <span>{{ content.length }} chars</span>
+        <span *ngIf="uploading" class="text-blue-500 animate-pulse">Uploading image...</span>
+    </div>
+</div>

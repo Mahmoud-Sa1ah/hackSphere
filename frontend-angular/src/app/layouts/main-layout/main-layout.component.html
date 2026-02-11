@@ -1,0 +1,217 @@
+<div
+  class="flex h-screen bg-space-light dark:bg-space-dark text-slate-800 dark:text-white font-sans transition-colors duration-300">
+  <!-- Sidebar -->
+  <app-sidebar
+    class="hidden md:flex flex-col border-r border-gray-200 dark:border-space-secondary/30 bg-white dark:bg-space-light z-10 shadow-lg transition-all duration-300"></app-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col min-h-0 relative z-0">
+
+    <!-- Header -->
+    <app-header
+      class="sticky top-0 z-20 w-full h-16 border-b border-gray-200 dark:border-space-secondary/30 bg-white/80 dark:bg-space-light/80 backdrop-blur-md shadow-sm"></app-header>
+
+    <!-- Scrollable Content -->
+    <!-- Scrollable Content -->
+    <main #scrollContainer
+      class="flex-1 flex flex-col overflow-x-hidden overflow-y-auto bg-slate-50 dark:bg-space-dark relative">
+      <!-- Background Elements -->
+      <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-20 animate-pulse">
+        </div>
+        <div
+          class="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-20 animate-pulse delay-1000">
+        </div>
+      </div>
+
+      <div class="relative px-20 py-4 w-full flex-1">
+        <router-outlet></router-outlet>
+      </div>
+
+      <!-- Footer -->
+      <app-footer
+        class="relative z-10 border-t border-gray-200 dark:border-space-secondary/30 bg-white dark:bg-space-light py-4 shrink-0 mt-auto"></app-footer>
+    </main>
+
+  </div>
+</div>
+
+<!-- GLOBAL MODALS (Outside stacking contexts) -->
+
+<!-- 1. Notification Detail Viewer -->
+@if (viewedNotification) {
+<div class="fixed inset-0 z-[100000] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity" (click)="closeNotifViewer()"></div>
+  <div class="flex min-h-full items-center justify-center p-4 text-center">
+    <div
+      class="relative transform overflow-hidden rounded-xl bg-white dark:bg-[#111827] text-left shadow-2xl transition-all sm:my-8 w-full max-w-lg border border-gray-200 dark:border-gray-700"
+      (click)="$event.stopPropagation()">
+      <div
+        class="bg-gray-50 dark:bg-[#1f2937] px-6 py-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-sky-100 dark:bg-sky-900/30 rounded-lg">
+            <ng-icon name="lucideBell" class="text-sky-600 dark:text-sky-400" size="18"></ng-icon>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Message Details</h3>
+        </div>
+        <button type="button"
+          class="text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded-lg transition-colors focus:outline-none"
+          (click)="closeNotifViewer()">
+          <ng-icon name="lucideX" size="20"></ng-icon>
+        </button>
+      </div>
+      <div class="px-6 py-6 space-y-5">
+        <div>
+          <h4 class="text-xl font-bold text-gray-900 dark:text-white break-all leading-tight">{{
+            viewedNotification.title }}</h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Received: {{ viewedNotification.createdAt |
+            date:'medium' }}</p>
+        </div>
+        <div
+          class="bg-gray-50 dark:bg-[#1f2937] p-5 rounded-xl border border-gray-100 dark:border-gray-700/50 min-h-[120px]">
+          <p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap break-all">{{
+            viewedNotification.message }}</p>
+        </div>
+      </div>
+      <div
+        class="bg-gray-50 dark:bg-[#111827] px-6 py-4 sm:flex sm:flex-row-reverse border-t border-gray-200 dark:border-gray-700">
+        <button type="button"
+          class="w-full inline-flex justify-center rounded-lg border border-transparent bg-sky-600 px-8 py-2.5 text-sm font-bold text-white shadow-lg shadow-sky-500/20 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 sm:w-auto transition-all transform active:scale-95"
+          (click)="closeNotifViewer()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- 2. Notification Sender -->
+@if (selectedUserForNotif) {
+<div class="fixed inset-0 z-[100000] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity" (click)="closeNotifSender()"></div>
+  <div class="flex min-h-full items-center justify-center p-4 text-center">
+    <div
+      class="relative transform overflow-hidden rounded-xl bg-white dark:bg-[#111827] text-left shadow-2xl transition-all sm:my-8 w-full max-w-lg border border-gray-200 dark:border-gray-700"
+      (click)="$event.stopPropagation()">
+      <div
+        class="bg-gray-50 dark:bg-[#1f2937] px-6 py-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Send Notification</h3>
+        <button type="button"
+          class="text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded-lg transition-colors focus:outline-none"
+          (click)="closeNotifSender()">
+          <ng-icon name="lucideX" size="20"></ng-icon>
+        </button>
+      </div>
+      <div class="px-6 py-6 space-y-5">
+        <div class="bg-blue-50 dark:bg-blue-900/30 px-4 py-3 rounded-lg border border-blue-100 dark:border-blue-800">
+          <p class="text-sm font-medium text-blue-700 dark:text-blue-300">To: <span
+              class="font-bold text-blue-800 dark:text-blue-200 break-all">{{ selectedUserForNotif.name
+              }}</span></p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Title</label>
+          <input type="text" [(ngModel)]="notifTitle"
+            class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-3 placeholder-gray-400 dark:placeholder-gray-500 transition-all"
+            placeholder="Notification Title">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Message</label>
+          <textarea rows="5" [(ngModel)]="notifMessage"
+            class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] text-gray-900 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-3 resize-none break-all placeholder-gray-400 dark:placeholder-gray-500 transition-all"
+            placeholder="Type your message here..."></textarea>
+        </div>
+      </div>
+      <div
+        class="bg-gray-50 dark:bg-[#111827] px-6 py-4 sm:flex sm:flex-row-reverse gap-3 border-t border-gray-200 dark:border-gray-700">
+        <button type="button"
+          class="w-full inline-flex justify-center rounded-lg border border-transparent bg-blue-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          (click)="handleSendGlobalNotif()" [disabled]="!notifMessage.trim()">Send Notification</button>
+        <button type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-transparent px-6 py-2.5 text-sm font-bold text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:w-auto transition-all transform active:scale-95"
+          (click)="closeNotifSender()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- 3. Knowledge Base Dialog -->
+@if (showKnowledgeDialog) {
+<div class="fixed inset-0 z-[100000] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" (click)="closeKnowledgeDialog()"></div>
+  <div class="flex min-h-full items-center justify-center p-4">
+    <div
+      class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl border border-gray-200 dark:border-gray-700 flex flex-col max-h-[90vh]"
+      (click)="$event.stopPropagation()">
+      <!-- Header -->
+      <div
+        class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg">
+            <ng-icon name="lucideBookOpen" class="text-indigo-600 dark:text-indigo-400" size="18"></ng-icon>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+            {{ editingArticle ? 'Edit Article' : 'New Article' }}
+          </h3>
+        </div>
+        <button (click)="closeKnowledgeDialog()"
+          class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition-all">
+          <ng-icon name="lucideX" size="20"></ng-icon>
+        </button>
+      </div>
+
+      <!-- Scrollable Body -->
+      <div class="p-6 space-y-5 overflow-y-auto flex-1 custom-scrollbar">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Title *</label>
+            <input type="text" [(ngModel)]="knowledgeForm.title"
+              class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category *</label>
+            <select [(ngModel)]="knowledgeForm.category"
+              class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+              <option value="Fundamentals">Fundamentals</option>
+              <option value="Web Security">Web Security</option>
+              <option value="Network Security">Network Security</option>
+              <option value="Reconnaissance">Reconnaissance</option>
+              <option value="Cryptography">Cryptography</option>
+              <option value="Exploitation">Exploitation</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Content *</label>
+          <app-rich-text-editor [(ngModel)]="knowledgeForm.content" placeholder="Write your content here..."
+            (imageUpload)="onEditorImageUpload($event)">
+          </app-rich-text-editor>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tags</label>
+          <input type="text" [(ngModel)]="knowledgeForm.tags"
+            class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            placeholder="e.g., security, web">
+        </div>
+        <div class="flex items-center space-x-3">
+          <input type="checkbox" id="isPublishedGlobal" [(ngModel)]="knowledgeForm.isPublished"
+            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+          <label for="isPublishedGlobal" class="text-sm text-gray-700 dark:text-gray-300">Publish immediately</label>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex gap-3 shrink-0">
+        <button (click)="closeKnowledgeDialog()"
+          class="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-medium border border-gray-200 dark:border-gray-600 hover:bg-gray-200 transition-all">Cancel</button>
+        <button (click)="handleSaveKnowledge()"
+          class="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md transition-all flex items-center justify-center gap-2">
+          <ng-icon name="lucidePlus" size="18"></ng-icon>
+          <span>{{ editingArticle ? 'Update' : 'Create' }} Article</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

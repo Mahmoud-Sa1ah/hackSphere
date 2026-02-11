@@ -1,0 +1,175 @@
+<!-- Loading State -->
+<div *ngIf="loading" class="flex items-center justify-center py-24">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+</div>
+
+<div *ngIf="!loading && lab" class="max-w-6xl mx-auto space-y-6 pb-8">
+    <!-- Back Button -->
+    <a [routerLink]="['/labs']"
+        class="flex items-center text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors w-fit">
+        <ng-icon name="lucideArrowLeft" size="20" class="mr-2"></ng-icon>
+        Back to Labs
+    </a>
+
+    <!-- Lab Header Card -->
+    <div
+        class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-slate-700">
+        <div class="relative h-32 bg-gray-100 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="absolute bottom-4 left-6 flex items-center gap-4">
+                <div class="p-3 bg-white dark:bg-slate-700 rounded-xl shadow-sm">
+                    <ng-icon name="lucideGraduationCap" class="text-gray-600 dark:text-slate-300" size="32"></ng-icon>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{{ lab.title }}</h1>
+                    <div class="flex items-center gap-3 mt-1">
+                        <span class="px-3 py-1 text-xs font-medium rounded-full"
+                            [ngClass]="getDifficultyColor(lab.difficulty)">
+                            {{ lab.difficulty }}
+                        </span>
+                        <span
+                            class="px-3 py-1 bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 text-xs font-medium rounded-full">
+                            {{ lab.category }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute top-4 right-6 flex items-center gap-2">
+                <span
+                    class="px-4 py-2 bg-lime-600/20 text-lime-600 dark:text-lime-400 border border-lime-500/30 text-sm font-semibold rounded-full flex items-center gap-1">
+                    <ng-icon name="lucideTrophy" size="16"></ng-icon>
+                    {{ lab.points }} XP
+                </span>
+                <span *ngIf="myResult"
+                    class="px-4 py-2 bg-emerald-600/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-sm font-semibold rounded-full flex items-center gap-1">
+                    <ng-icon name="lucideCircleCheck" size="16"></ng-icon>
+                    Solved
+                </span>
+            </div>
+        </div>
+
+        <div class="p-6 md:p-8 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-start gap-2 mb-4">
+                <ng-icon name="lucideTarget" class="text-blue-500 dark:text-blue-400 mt-1" size="20"></ng-icon>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Challenge Description</h2>
+            </div>
+            <p class="text-gray-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                {{ lab.description }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Submit Solution Section -->
+    <div
+        class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200 dark:border-slate-700">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="p-2 bg-gray-100 dark:bg-slate-700 rounded-lg">
+                <ng-icon name="lucideSend" class="text-blue-500 dark:text-blue-400" size="24"></ng-icon>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+                    {{ myResult ? 'Resubmit Solution' : 'Submit Your Solution' }}
+                </h2>
+                <p class="text-sm text-gray-500 dark:text-slate-400">
+                    Describe your approach, findings, or paste the flag
+                </p>
+            </div>
+        </div>
+
+        <!-- Previous AI Feedback -->
+        <div *ngIf="myResult?.aiFeedback" class="mb-6 p-4 bg-emerald-600/10 border border-emerald-500/30 rounded-xl">
+            <h4 class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-2 flex items-center gap-2">
+                <ng-icon name="lucideCircleCheck" size="16"></ng-icon>
+                Previous AI Feedback
+            </h4>
+            <p class="text-sm text-emerald-700 dark:text-emerald-300">{{ myResult?.aiFeedback }}</p>
+        </div>
+
+        <textarea [(ngModel)]="submissionDetails" placeholder="Enter your solution, methodology, or findings here..."
+            rows="6"
+            class="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 dark:bg-slate-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-slate-400 resize-none"></textarea>
+
+        <div class="mt-4 flex items-center justify-between">
+            <p class="text-xs text-gray-500 dark:text-slate-400 flex items-center">
+                <ng-icon name="lucideClock" size="12" class="mr-1"></ng-icon>
+                AI will analyze and provide feedback on your submission
+            </p>
+            <button (click)="handleSubmit()" [disabled]="submitting || !submissionDetails.trim()"
+                class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                <ng-container *ngIf="submitting; else submitBtn">
+                    <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Submitting...
+                </ng-container>
+                <ng-template #submitBtn>
+                    <ng-icon name="lucideSend" size="18"></ng-icon>
+                    Submit Solution
+                </ng-template>
+            </button>
+        </div>
+    </div>
+
+    <!-- Solvers Section -->
+    <div
+        class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-gray-100 dark:bg-slate-700 rounded-lg">
+                    <ng-icon name="lucideTrophy" class="text-amber-500 dark:text-amber-400" size="24"></ng-icon>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Solved By</h2>
+                    <p class="text-sm text-gray-500 dark:text-slate-400">
+                        {{ solvers.length }} {{ solvers.length === 1 ? 'person has' : 'people have' }} completed this
+                        lab
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="solvers.length > 0; else noSolvers"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div *ngFor="let user of solvers; let i = index"
+                class="flex items-center space-x-3 p-4 rounded-xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 transition-all duration-300">
+                <!-- Rank Badge -->
+                <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                    [ngClass]="{
+              'bg-amber-600/30 text-amber-600 dark:text-amber-400 border border-amber-500/30': i === 0,
+              'bg-slate-600/30 text-slate-600 dark:text-slate-300 border border-slate-500/30': i === 1,
+              'bg-orange-600/30 text-orange-600 dark:text-orange-400 border border-orange-500/30': i === 2,
+              'bg-slate-600/30 text-slate-600 dark:text-slate-400 border border-slate-500/30': i > 2
+            }">
+                    {{ i + 1 }}
+                </div>
+
+                <!-- Avatar -->
+                <div class="flex-shrink-0">
+                    <img *ngIf="user.profilePhoto" [src]="user.profilePhoto" [alt]="user.name"
+                        class="w-10 h-10 rounded-full object-cover border-2 border-slate-200 dark:border-slate-600">
+                    <div *ngIf="!user.profilePhoto"
+                        class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-600 flex items-center justify-center">
+                        <ng-icon name="lucideUser" class="text-slate-500 dark:text-slate-300" size="20"></ng-icon>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="min-w-0">
+                    <h3 class="font-semibold text-gray-900 dark:text-white truncate text-sm">
+                        {{ user.name }}
+                    </h3>
+                    <div class="flex items-center text-xs text-gray-500 dark:text-slate-400">
+                        <ng-icon name="lucideCalendar" size="10" class="mr-1"></ng-icon>
+                        {{ user.dateSolved | date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #noSolvers>
+            <div class="text-center py-12">
+                <div class="p-4 bg-gray-100 dark:bg-slate-700 rounded-full inline-block mb-4">
+                    <ng-icon name="lucideTrophy" class="text-gray-400 dark:text-slate-400" size="32"></ng-icon>
+                </div>
+                <p class="text-gray-500 dark:text-slate-400">Be the first to solve this lab!</p>
+            </div>
+        </ng-template>
+    </div>
+</div>
