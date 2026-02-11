@@ -1,6 +1,6 @@
 # PentestHub - Cybersecurity Pentesting Platform HackSphere
 
-A comprehensive full-stack pentesting platform built with React, ASP.NET Core, and a portable launcher client.
+A comprehensive full-stack pentesting platform built with angular, ASP.NET Core, and a portable launcher client.
 
 ## 🏗️ Architecture
 
